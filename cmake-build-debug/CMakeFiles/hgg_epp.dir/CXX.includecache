@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/aleksandr/CLionProjects/hgg_epp/main.cpp
+iostream
+-
+tools/geometry.h
+/Users/aleksandr/CLionProjects/hgg_epp/tools/geometry.h
+vector
+-
+random
+-
+
+/Users/aleksandr/CLionProjects/hgg_epp/tools/geometry.h
+cmath
+-
+
