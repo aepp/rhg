@@ -1,4 +1,4 @@
-# Install script for directory: /Users/aleksandr/CLionProjects/hgg_epp
+# Install script for directory: /Users/aleksandr/Masterarbeit/hgg_epp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/aleksandr/CLionProjects/hgg_epp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/aleksandr/Masterarbeit/hgg_epp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
