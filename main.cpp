@@ -17,8 +17,6 @@ int main() {
 
     double R = Geometry::getTargetRadius(n, m, alpha); // target radius
 
-//    cout << "target radius: " << R << endl;
-
     double p = 0.9; // radialBoundaryRatio
     double c_0 = 0;
     double c_max = R;
@@ -28,6 +26,11 @@ int main() {
     vector<double> C;
     C.push_back(c_0);
     C.push_back(c_1);
+
+//    vector<tuple<double, double, double, double> > annuli;
+//    double mincdf = std::cosh(alpha * c_0);
+//    double mass = std::cosh(alpha * c_1) - mincdf;
+//    annuli.emplace_back(make_tuple(c_0, c_1, mincdf, mass));
 
     vector<vector<tuple<double, double, int> > > B;
     B.emplace_back();
@@ -47,6 +50,10 @@ int main() {
 
         C.push_back(c_i_next);
         B.emplace_back();
+//        mincdf = std::cosh(alpha * c_i);
+//        mass = std::cosh(alpha * c_i_next) - mincdf;
+//        annuli.emplace_back(make_tuple(c_i, c_i_next, mincdf, mass));
+
         cout << "c_" << i + 1 << ": " << c_i_next << endl;
     }
     cout << "c_" << C.size() << " (R): " << c_max << endl << "-------------" << endl << endl;
@@ -64,16 +71,14 @@ int main() {
     mt19937 gen_phi(rd_phi()); //Standard mersenne_twister_engine seeded with rd()
     uniform_real_distribution<> dis_phi(0, 2 * M_PI);
 
-    // todo: implement random distro from density
-    // for now it's just uniform distro
     random_device rd_r;  //Will be used to obtain a seed for the random number engine
     mt19937 gen_r(rd_r()); //Standard mersenne_twister_engine seeded with rd()
-    uniform_real_distribution<> dis_r(0, R);
+    uniform_real_distribution<> dis_r(0.1, 1);
 
     for (int v = 0; v < n; v++) {
-        // draw r and phi
-        r = dis_r(gen_r);
-        // just for now it's uniform distributed
+        // draw phi
+        r = Utils::drawRWithInverseTransformSampling(dis_r(gen_r), alpha, R);
+        cout << r << endl;
         phi = dis_phi(gen_phi);
 
         // check in which slab drawn r belongs
@@ -90,7 +95,7 @@ int main() {
      * sort vertices in each b_i
      */
     for (int i = 0; i < B.size(); i++) {
-        sort(B[i].begin(), B[i].end(), Utils::sortPairsBySecond);
+        sort(B[i].begin(), B[i].end(), Utils::sortTuplesBySecond);
     }
 
     /**
@@ -107,12 +112,17 @@ int main() {
 
             for (int u = 0; u < B[i].size(); u++) {
                 phi_u = get<1>(B[i][u]);
-                if (abs(phi_v - phi_u) <= maxAbsDeviation) {
+                if (abs(phi_v - phi_u) <= maxAbsDeviation && v != u) {
                     G.emplace_back(get<2>(B[i][v]), get<2>(B[i][u]));
                 }
             }
         }
     }
+
+    /**
+     * sort resulting graph G
+     */
+    sort(G.begin(), G.end(), Utils::sortG);
 
     /**
      * log
@@ -124,16 +134,19 @@ int main() {
     }
     cout << "-------------" << endl << endl;
 
-//    for (int i = 0; i < B.size(); i++) {
-//        for (int v = 0; v < B[i].size(); v++) {
-//            cout << "(" << B[i][v].first << ", " << B[i][v].second << "); ";
-//        }
-//        cout << endl;
-//    }
+    /**
+     * write resulting graph G to file
+     */
+    std::ofstream result("/Users/aleksandr/Masterarbeit/hgg_epp/result.txt");
 
+    for (int v = 0; v < G.size(); v++) {
+        result << get<0>(G[v]) << " " << get<1>(G[v]) << "\n";
+    }
+
+    result.close();
 
     // integral of density function is the cdf
-    // integrate f(r)=a*sinh(a*r)/(cosh(a*R)-1) = cosh(alpha * r)/(cosh(alpha * R) - 1) + constant
+    // integrate f(r)=a*sinh(a*r)/(cosh(a*R)-1) = cosh(alpha * r)/(cosh(alpha * R) - 1)
 
 
     return 0;

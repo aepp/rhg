@@ -10,7 +10,11 @@
 
 class Utils {
 public:
-    static bool sortPairsBySecond(const std::tuple<double, double, int> &a, const std::tuple<double, double, int> &b);
+    static bool sortTuplesBySecond(const std::tuple<double, double, int> &a, const std::tuple<double, double, int> &b);
+
+    static bool sortG(const std::tuple<int, int> &v, const std::tuple<int, int> &u);
+
+    static double drawRWithInverseTransformSampling(double prob, double alpha, double R);
 };
 
 

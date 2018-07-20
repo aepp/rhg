@@ -30,3 +30,4 @@
 *.app
 /cmake-build-debug/
 /cmake-build/
+result.txt
